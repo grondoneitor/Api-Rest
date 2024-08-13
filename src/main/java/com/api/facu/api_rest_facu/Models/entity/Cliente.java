@@ -1,14 +1,11 @@
 package com.api.facu.api_rest_facu.Models.entity;
+import lombok.*;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
-
 import java.io.Serializable;
 import java.util.Date;
 
+@Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -34,4 +31,43 @@ public class Cliente implements Serializable {
    @Column(name ="fecha_registro")
    private Date fechaRegistro;
 
+   public Integer getIdCliente() {
+      return idCliente;
+   }
+
+   public void setIdCliente(Integer idCliente) {
+      this.idCliente = idCliente;
+   }
+
+   public String getNombre() {
+      return nombre;
+   }
+
+   public void setNombre(String nombre) {
+      this.nombre = nombre;
+   }
+
+   public String getApellido() {
+      return apellido;
+   }
+
+   public void setApellido(String apellido) {
+      this.apellido = apellido;
+   }
+
+   public String getCorreo() {
+      return correo;
+   }
+
+   public void setCorreo(String correo) {
+      this.correo = correo;
+   }
+
+   public Date getFechaRegistro() {
+      return fechaRegistro;
+   }
+
+   public void setFechaRegistro(Date fechaRegistro) {
+      this.fechaRegistro = fechaRegistro;
+   }
 }

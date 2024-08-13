@@ -1,5 +1,6 @@
 package com.api.facu.api_rest_facu.controllers;
 
+import com.api.facu.api_rest_facu.Models.dto.ClienteDto;
 import com.api.facu.api_rest_facu.Models.entity.Cliente;
 import com.api.facu.api_rest_facu.servicio.IClienteServicio;
 import com.api.facu.api_rest_facu.servicio.implementaciones.ClienteIMPL;
@@ -21,14 +22,14 @@ public class ClienteControler {
 
     @PostMapping("cliente")
     @ResponseStatus(HttpStatus.CREATED)
-    public Cliente create( @RequestBody  Cliente cliente) {
+    public Cliente create( @RequestBody ClienteDto cliente) {
 
         return clienteIMPL.save(cliente);
     }
 
     @PutMapping("cliente")
     @ResponseStatus(HttpStatus.CREATED)
-    public Cliente update(@RequestBody Cliente cliente) {
+    public Cliente update(@RequestBody ClienteDto cliente) {
 
         return clienteIMPL.save(cliente);
     }
@@ -39,7 +40,7 @@ public class ClienteControler {
         Map<String, Object> mapErrors = new HashMap<>();
 
         try{
-            Cliente nuevoCliente = clienteIMPL.finById(id);
+            ClienteDto nuevoCliente = clienteIMPL.finById(id);
             clienteIMPL.delete(nuevoCliente);
 
             return new ResponseEntity<>(nuevoCliente, HttpStatus.NO_CONTENT);
@@ -56,7 +57,7 @@ public class ClienteControler {
 
     @GetMapping("cliente/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Cliente showById(@PathVariable Integer id){
+    public ClienteDto showById(@PathVariable Integer id){
         return clienteIMPL.finById(id);
     }
 
