@@ -39,7 +39,7 @@ public class ClienteIMPL implements IClienteServicio {
 
     @Transactional
     @Override
-    public void delete(ClienteDto cliente) {
+    public void delete(Cliente cliente) {
      clienteDao.delete(cliente);
     }
 }

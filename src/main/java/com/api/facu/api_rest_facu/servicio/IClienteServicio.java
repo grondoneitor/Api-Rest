@@ -10,5 +10,5 @@ public interface IClienteServicio  {
 
     Cliente finById(Integer id);
 
-    void delete(ClienteDto cliente);
+    void delete(Cliente cliente);
 }

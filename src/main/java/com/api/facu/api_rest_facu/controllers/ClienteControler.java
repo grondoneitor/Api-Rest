@@ -22,16 +22,28 @@ public class ClienteControler {
 
     @PostMapping("cliente")
     @ResponseStatus(HttpStatus.CREATED)
-    public Cliente create( @RequestBody ClienteDto cliente) {
-
-        return clienteIMPL.save(cliente);
+    public ClienteDto create( @RequestBody ClienteDto clienteDto) {
+        Cliente clienteSave = clienteIMPL.save(clienteDto);
+        return ClienteDto.builder()
+                .idCliente(clienteSave.getIdCliente())
+                .nombre(clienteSave.getNombre())
+                .apellido(clienteSave.getApellido())
+                .correo(clienteSave.getCorreo())
+                .fechaRegistro(clienteSave.getFechaRegistro())
+                .build();
     }
 
     @PutMapping("cliente")
     @ResponseStatus(HttpStatus.CREATED)
-    public Cliente update(@RequestBody ClienteDto cliente) {
-
-        return clienteIMPL.save(cliente);
+    public ClienteDto update(@RequestBody ClienteDto clienteDto) {
+        Cliente clienteUpdate = clienteIMPL.save(clienteDto);
+        return ClienteDto.builder()
+                .idCliente(clienteUpdate.getIdCliente())
+                .nombre(clienteUpdate.getNombre())
+                .apellido(clienteUpdate.getApellido())
+                .correo(clienteUpdate.getCorreo())
+                .fechaRegistro(clienteUpdate.getFechaRegistro())
+                .build();
     }
 
     @DeleteMapping("cliente/{id}")
@@ -40,7 +52,7 @@ public class ClienteControler {
         Map<String, Object> mapErrors = new HashMap<>();
 
         try{
-            ClienteDto nuevoCliente = clienteIMPL.finById(id);
+            Cliente nuevoCliente = clienteIMPL.finById(id);
             clienteIMPL.delete(nuevoCliente);
 
             return new ResponseEntity<>(nuevoCliente, HttpStatus.NO_CONTENT);
@@ -58,7 +70,14 @@ public class ClienteControler {
     @GetMapping("cliente/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ClienteDto showById(@PathVariable Integer id){
-        return clienteIMPL.finById(id);
+        Cliente clienteById = clienteIMPL.finById(id);
+        return ClienteDto.builder()
+                .idCliente(clienteById.getIdCliente())
+                .nombre(clienteById.getNombre())
+                .apellido(clienteById.getApellido())
+                .correo(clienteById.getCorreo())
+                .fechaRegistro(clienteById.getFechaRegistro())
+                .build();
     }
 
 
