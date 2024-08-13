@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.api.facu.api_rest_facu.Models.payload.response;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -19,6 +20,24 @@ public class ClienteControler {
 
     @Autowired
     private IClienteServicio clienteIMPL;
+
+    @GetMapping("clientes")
+    public ResponseEntity<?> showAll(){
+        List<Cliente> listaClientes = clienteIMPL.listAll();
+        try{
+            if(listaClientes == null) {
+                return new ResponseEntity<>(response.builder().mensaje("No hay clientes disponibles").objecto(null),HttpStatus.OK);
+
+            }else {
+                return new ResponseEntity<>(response.builder().mensaje("").objecto(listaClientes).build(), HttpStatus.OK);
+            }
+        }catch (DataAccessException ex){
+            return new ResponseEntity<>(response.builder().mensaje(ex.getMessage()).objecto(null),HttpStatus.OK);
+
+        }
+    }
+
+
 
     @PostMapping("cliente")
     @ResponseStatus(HttpStatus.CREATED)
