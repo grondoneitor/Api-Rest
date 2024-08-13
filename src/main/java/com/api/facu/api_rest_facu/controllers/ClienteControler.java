@@ -35,27 +35,35 @@ public class ClienteControler {
             return new ResponseEntity<>(response.builder().mensaje("Guardado Correctamente").objecto(cliente).build(), HttpStatus.CREATED);
         }catch (DataAccessException ex){
 
-            return new ResponseEntity<>(response.builder().mensaje(ex.getMessage()).objecto(null),HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(response.builder().mensaje(ex.getMessage()).objecto(null),HttpStatus.METHOD_NOT_ALLOWED);
 
         }
     }
 
-    @PutMapping("cliente")
+    @PutMapping("cliente/{id}")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<?>  update(@RequestBody ClienteDto clienteDto) {
+    public ResponseEntity<?>  update(@RequestBody ClienteDto clienteDto, @PathVariable Integer id) {
         try{
-            Cliente clienteUpdate = clienteIMPL.save(clienteDto);
-            ClienteDto cliente =ClienteDto.builder()
-                    .idCliente(clienteUpdate.getIdCliente())
-                    .nombre(clienteUpdate.getNombre())
-                    .apellido(clienteUpdate.getApellido())
-                    .correo(clienteUpdate.getCorreo())
-                    .fechaRegistro(clienteUpdate.getFechaRegistro())
-                    .build();
-           return new ResponseEntity<>(response.builder().mensaje("Actualizado Correctamente").objecto(cliente).build(), HttpStatus.CREATED);
+            if(clienteIMPL.existsById(id)){
+                clienteDto.setIdCliente(id);
+                Cliente clienteUpdate = clienteIMPL.save(clienteDto);
+                ClienteDto cliente =ClienteDto.builder()
+                        .idCliente(clienteUpdate.getIdCliente())
+                        .nombre(clienteUpdate.getNombre())
+                        .apellido(clienteUpdate.getApellido())
+                        .correo(clienteUpdate.getCorreo())
+                        .fechaRegistro(clienteUpdate.getFechaRegistro())
+                        .build();
+                return new ResponseEntity<>(response.builder().mensaje("Actualizado Correctamente").objecto(cliente).build(), HttpStatus.CREATED);
+            }else{
+                return new ResponseEntity<>(response.builder().mensaje("No se puede actualizar un cliente inexistente").objecto(null),HttpStatus.METHOD_NOT_ALLOWED);
+
+            }
+
+
         }catch (DataAccessException ex){
 
-            return new ResponseEntity<>(response.builder().mensaje(ex.getMessage()).objecto(null),HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(response.builder().mensaje(ex.getMessage()).objecto(null),HttpStatus.METHOD_NOT_ALLOWED);
 
         }
 
@@ -77,7 +85,7 @@ public class ClienteControler {
                                                 .mensaje(ex.getMessage())
                                                 .objecto(null)
                                                 .build()
-                                                , HttpStatus.INTERNAL_SERVER_ERROR);
+                                                , HttpStatus.METHOD_NOT_ALLOWED);
 
         }
 
@@ -100,7 +108,7 @@ public class ClienteControler {
             return new ResponseEntity<>(response.builder().mensaje("Buscado Correctamente").objecto(cliente).build(), HttpStatus.OK);
         }catch (DataAccessException ex){
 
-            return new ResponseEntity<>(response.builder().mensaje(ex.getMessage()).objecto(null),HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(response.builder().mensaje(ex.getMessage()).objecto(null),HttpStatus.NOT_FOUND);
 
         }
     }

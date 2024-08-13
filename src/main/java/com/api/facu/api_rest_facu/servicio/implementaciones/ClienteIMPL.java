@@ -42,4 +42,10 @@ public class ClienteIMPL implements IClienteServicio {
     public void delete(Cliente cliente) {
      clienteDao.delete(cliente);
     }
+
+    @Override
+    public boolean existsById(Integer id) {
+
+        return clienteDao.existsById(id);
+    }
 }

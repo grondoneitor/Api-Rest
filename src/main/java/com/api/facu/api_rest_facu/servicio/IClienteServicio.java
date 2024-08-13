@@ -11,4 +11,6 @@ public interface IClienteServicio  {
     Cliente finById(Integer id);
 
     void delete(Cliente cliente);
+
+    boolean existsById(Integer id);
 }
