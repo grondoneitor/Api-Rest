@@ -108,7 +108,7 @@ public class ClienteControler {
             return new ResponseEntity<>(response.builder().mensaje("Buscado Correctamente").objecto(cliente).build(), HttpStatus.OK);
         }catch (DataAccessException ex){
 
-            return new ResponseEntity<>(response.builder().mensaje(ex.getMessage()).objecto(null),HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(response.builder().mensaje("No se encontro un cliente con ese id").objecto(null),HttpStatus.NOT_FOUND);
 
         }
     }
