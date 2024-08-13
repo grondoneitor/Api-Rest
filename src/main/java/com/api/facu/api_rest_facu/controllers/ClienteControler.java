@@ -9,7 +9,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import com.api.facu.api_rest_facu.Models.payload.response;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,34 +22,49 @@ public class ClienteControler {
 
     @PostMapping("cliente")
     @ResponseStatus(HttpStatus.CREATED)
-    public ClienteDto create( @RequestBody ClienteDto clienteDto) {
-        Cliente clienteSave = clienteIMPL.save(clienteDto);
-        return ClienteDto.builder()
-                .idCliente(clienteSave.getIdCliente())
-                .nombre(clienteSave.getNombre())
-                .apellido(clienteSave.getApellido())
-                .correo(clienteSave.getCorreo())
-                .fechaRegistro(clienteSave.getFechaRegistro())
-                .build();
+    public ResponseEntity<?>  create( @RequestBody ClienteDto clienteDto) {
+        try{
+            Cliente clienteCreate = clienteIMPL.save(clienteDto);
+            ClienteDto cliente =ClienteDto.builder()
+                    .idCliente(clienteCreate.getIdCliente())
+                    .nombre(clienteCreate.getNombre())
+                    .apellido(clienteCreate.getApellido())
+                    .correo(clienteCreate.getCorreo())
+                    .fechaRegistro(clienteCreate.getFechaRegistro())
+                    .build();
+            return new ResponseEntity<>(response.builder().mensaje("Guardado Correctamente").objecto(cliente).build(), HttpStatus.CREATED);
+        }catch (DataAccessException ex){
+
+            return new ResponseEntity<>(response.builder().mensaje(ex.getMessage()).objecto(null),HttpStatus.INTERNAL_SERVER_ERROR);
+
+        }
     }
 
     @PutMapping("cliente")
     @ResponseStatus(HttpStatus.CREATED)
-    public ClienteDto update(@RequestBody ClienteDto clienteDto) {
-        Cliente clienteUpdate = clienteIMPL.save(clienteDto);
-        return ClienteDto.builder()
-                .idCliente(clienteUpdate.getIdCliente())
-                .nombre(clienteUpdate.getNombre())
-                .apellido(clienteUpdate.getApellido())
-                .correo(clienteUpdate.getCorreo())
-                .fechaRegistro(clienteUpdate.getFechaRegistro())
-                .build();
+    public ResponseEntity<?>  update(@RequestBody ClienteDto clienteDto) {
+        try{
+            Cliente clienteUpdate = clienteIMPL.save(clienteDto);
+            ClienteDto cliente =ClienteDto.builder()
+                    .idCliente(clienteUpdate.getIdCliente())
+                    .nombre(clienteUpdate.getNombre())
+                    .apellido(clienteUpdate.getApellido())
+                    .correo(clienteUpdate.getCorreo())
+                    .fechaRegistro(clienteUpdate.getFechaRegistro())
+                    .build();
+           return new ResponseEntity<>(response.builder().mensaje("Actualizado Correctamente").objecto(cliente).build(), HttpStatus.CREATED);
+        }catch (DataAccessException ex){
+
+            return new ResponseEntity<>(response.builder().mensaje(ex.getMessage()).objecto(null),HttpStatus.INTERNAL_SERVER_ERROR);
+
+        }
+
+
     }
 
     @DeleteMapping("cliente/{id}")
     public ResponseEntity<?> delete(@PathVariable Integer id) {
 
-        Map<String, Object> mapErrors = new HashMap<>();
 
         try{
             Cliente nuevoCliente = clienteIMPL.finById(id);
@@ -58,10 +73,11 @@ public class ClienteControler {
             return new ResponseEntity<>(nuevoCliente, HttpStatus.NO_CONTENT);
 
         }catch (DataAccessException ex){
-
-             mapErrors.put("mensaje", ex.getMessage());
-             mapErrors.put("cliente",null);
-            return new ResponseEntity<>(mapErrors, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(response.builder()
+                                                .mensaje(ex.getMessage())
+                                                .objecto(null)
+                                                .build()
+                                                , HttpStatus.INTERNAL_SERVER_ERROR);
 
         }
 
@@ -69,15 +85,24 @@ public class ClienteControler {
 
     @GetMapping("cliente/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ClienteDto showById(@PathVariable Integer id){
-        Cliente clienteById = clienteIMPL.finById(id);
-        return ClienteDto.builder()
-                .idCliente(clienteById.getIdCliente())
-                .nombre(clienteById.getNombre())
-                .apellido(clienteById.getApellido())
-                .correo(clienteById.getCorreo())
-                .fechaRegistro(clienteById.getFechaRegistro())
-                .build();
+    public ResponseEntity<?> showById(@PathVariable Integer id){
+
+        try{
+            Cliente clienteById = clienteIMPL.finById(id);
+
+            ClienteDto cliente =ClienteDto.builder()
+                    .idCliente(clienteById.getIdCliente())
+                    .nombre(clienteById.getNombre())
+                    .apellido(clienteById.getApellido())
+                    .correo(clienteById.getCorreo())
+                    .fechaRegistro(clienteById.getFechaRegistro())
+                    .build();
+            return new ResponseEntity<>(response.builder().mensaje("Buscado Correctamente").objecto(cliente).build(), HttpStatus.OK);
+        }catch (DataAccessException ex){
+
+            return new ResponseEntity<>(response.builder().mensaje(ex.getMessage()).objecto(null),HttpStatus.INTERNAL_SERVER_ERROR);
+
+        }
     }
 
 
